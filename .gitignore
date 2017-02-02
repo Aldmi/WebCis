@@ -1,0 +1,7 @@
+src/.vs/
+src/Domain/obj/
+src/Domain/bin/
+src/WebUI/bin/
+src/WebUI/obj/
+src/UnitTests/obj/
+src/UnitTests/bin/
