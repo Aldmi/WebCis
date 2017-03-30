@@ -7,12 +7,3 @@ D:\ProjectC#\ASpNetMvc_test2\BackgroundDataExchange\obj\Debug\netstandard1.4\Bac
 D:\ProjectC#\ASpNetMvc_test2\BackgroundDataExchange\obj\Debug\netstandard1.4\BackgroundDataExchange.pdb
 D:\ProjectC#\ASpNetMvc_test2\BackgroundDataExchange\bin\Debug\netstandard1.4\Domain.dll
 D:\ProjectC#\ASpNetMvc_test2\BackgroundDataExchange\bin\Debug\netstandard1.4\Domain.pdb
-D:\Git\WebCis\src\BackgroundDataExchange\bin\Debug\netstandard1.4\BackgroundDataExchange.deps.json
-D:\Git\WebCis\src\BackgroundDataExchange\bin\Debug\netstandard1.4\BackgroundDataExchange.dll
-D:\Git\WebCis\src\BackgroundDataExchange\bin\Debug\netstandard1.4\BackgroundDataExchange.pdb
-D:\Git\WebCis\src\BackgroundDataExchange\bin\Debug\netstandard1.4\Domain.dll
-D:\Git\WebCis\src\BackgroundDataExchange\bin\Debug\netstandard1.4\Domain.pdb
-D:\Git\WebCis\src\BackgroundDataExchange\obj\Debug\netstandard1.4\BackgroundDataExchange.csprojResolveAssemblyReference.cache
-D:\Git\WebCis\src\BackgroundDataExchange\obj\Debug\netstandard1.4\BackgroundDataExchange.AssemblyInfo.cs
-D:\Git\WebCis\src\BackgroundDataExchange\obj\Debug\netstandard1.4\BackgroundDataExchange.dll
-D:\Git\WebCis\src\BackgroundDataExchange\obj\Debug\netstandard1.4\BackgroundDataExchange.pdb

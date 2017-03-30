@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ASpNetMvc_test2.Settings
+namespace WebCis.Settings
 {
     public class MainSetting
     {

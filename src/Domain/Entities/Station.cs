@@ -41,7 +41,7 @@ namespace Domain.Entities
 
 
 
-        public virtual IEnumerable<RailwayStStationStations> RailwayStations { get; set; }                                      //Многие ко многим с RailwayStation (для вывода всех станций по вокзалу) 
+        public virtual ICollection<RailwayStStationStations> RailwayStations { get; set; }                      //Многие ко многим с RailwayStation (для вывода всех станций по вокзалу) 
     }
 
 }

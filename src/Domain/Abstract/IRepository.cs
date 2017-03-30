@@ -14,10 +14,8 @@ namespace Domain.Abstract
 
         IQueryable<TEntity> Get();
 
-        IQueryable<TEntity> Search(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "");
+        Task<int?> GetId(Expression<Func<TEntity, bool>> predicate);
+
 
         void Insert(TEntity entity);
         void InsertRange(List<TEntity> entitys);
@@ -25,5 +23,8 @@ namespace Domain.Abstract
         void Update(TEntity entity);
         void Remove(TEntity entity);
         void RemoveRange(List<TEntity> entitys);
+
+
+        IList<TEntity> GetAll(params Expression<Func<TEntity, object>>[] navigationProperties);
     }
 }

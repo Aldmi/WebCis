@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ASpNetMvc_test2.Settings;
+using AutoMapper;
+using BusinessLayer;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.DbContext;
@@ -12,6 +13,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WebCis.Model;
+using WebCis.Settings;
+using WebCis.Mapping;
+
 
 namespace WebCis
 {
@@ -23,12 +28,19 @@ namespace WebCis
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("Settings/MainSetting.json")
+                .AddJsonFile("Settings/MainSetting.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
+
+            MapperConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new MappingProfile());
+            });
         }
 
         public IConfigurationRoot Configuration { get; }
+        private MapperConfiguration MapperConfiguration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,17 +52,22 @@ namespace WebCis
             services.Configure<MainSetting>(Configuration);
 
             // EF
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=CisDb_test;Trusted_Connection=True;";
-            services.AddDbContext<CisDbContext>(options => options.UseSqlServer(connection));
+            //var connection = @"Server=(localdb)\mssqllocaldb;Database=CisDb_test;Trusted_Connection=True;";
+            //services.AddDbContext<CisDbContext>(options => options.UseSqlServer(connection));
 
             // Add framework services.
             services.AddMvc();
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();  //на каждый запрос свой объект
+            //Mapper
+            services.AddSingleton<IMapper>(sp => MapperConfiguration.CreateMapper());
+
+            // DomainAcessLayer
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=CisDb_test;Trusted_Connection=True;"; //TODO: брать из настроек
+            services.AddScoped<IDomainAcessLayer>(provider => new DomainAcessLayer(connection));//на каждый запрос свой объект
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -75,16 +92,19 @@ namespace WebCis
             });
 
 
-
-            Initialize();
+           await Initialize(serviceProvider);
         }
 
 
-        private void Initialize()
+        private async Task Initialize(IServiceProvider serviceProvider)
         {
-            // InitializeDb.Initialize(app.ApplicationServices);
+            var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+            await SeedData.Initialize(unitOfWork);
 
             //QuartzApkDkReglamentRegSh.Start();
+
+          // var mainSetting_age = Configuration["age"];
         }
     }
+
 }

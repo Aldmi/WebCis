@@ -17,10 +17,32 @@ namespace Domain.Concrete
         protected DbSet<TEntity> DbSet { get; set; }
 
 
+
+
         public GenericRepository(CisDbContext context)
         {
             Context = context;
             DbSet = context.Set<TEntity>();
+        }
+
+
+        //DEBUG
+        public virtual IList<TEntity> GetAll(params Expression<Func<TEntity, object>>[] navigationProperties)
+        {
+            List<TEntity> list;
+           // using (var context = Context)
+           // {
+                IQueryable<TEntity> dbQuery = Context.Set<TEntity>();
+
+                //Apply eager loading
+                foreach (Expression<Func<TEntity, object>> navigationProperty in navigationProperties)
+                    dbQuery = dbQuery.Include<TEntity, object>(navigationProperty);
+
+                list = dbQuery
+                    .AsNoTracking()
+                    .ToList<TEntity>();
+          //  }
+            return list;
         }
 
 
@@ -37,29 +59,18 @@ namespace Domain.Concrete
         }
 
 
+        public virtual async Task<int?> GetId(Expression<Func<TEntity, bool>> predicate)
+        {
+           var entity = await DbSet.FirstOrDefaultAsync(predicate);
+           return entity?.Id;
+        }
+
+
         public virtual IQueryable<TEntity> Get()
         {
             return DbSet;
         }
 
-
-        public virtual IQueryable<TEntity> Search(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
-        {
-            IQueryable<TEntity> query = Get();
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            foreach (var includeProperty in includeProperties.Split                        //управление ленивой загрузкой
-                (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            return orderBy?.Invoke(query) ?? query;
-        }
 
 
         public virtual void Insert(TEntity entity)

@@ -8,12 +8,20 @@ namespace Domain.Concrete
     public class UnitOfWork : IUnitOfWork
     {
         private readonly CisDbContext _context;
+
         private GenericRepository<Station> _stationRepository;
         private GenericRepository<RegulatorySchedule> _regulatoryScheduleRepository;
         private GenericRepository<OperativeSchedule> _operativeScheduleRepository;
         private GenericRepository<RailwayStation> _railwayStationRepository;
         private GenericRepository<Diagnostic> _diagnosticRepository;
         private GenericRepository<Info> _infoRepository;
+
+        public IRepository<Station> StationRepository => _stationRepository ?? (_stationRepository = new GenericRepository<Station>(_context));
+        public IRepository<RegulatorySchedule> RegulatoryScheduleRepository => _regulatoryScheduleRepository ?? (_regulatoryScheduleRepository = new GenericRepository<RegulatorySchedule>(_context));
+        public IRepository<OperativeSchedule> OperativeScheduleRepository => _operativeScheduleRepository ?? (_operativeScheduleRepository = new GenericRepository<OperativeSchedule>(_context));
+        public IRepository<RailwayStation> RailwayStationRepository => _railwayStationRepository ?? (_railwayStationRepository = new GenericRepository<RailwayStation>(_context));
+        public IRepository<Diagnostic> DiagnosticRepository => _diagnosticRepository ?? (_diagnosticRepository = new GenericRepository<Diagnostic>(_context));
+        public IRepository<Info> InfoRepository => _infoRepository ?? (_infoRepository = new GenericRepository<Info>(_context));
 
 
 
@@ -22,14 +30,6 @@ namespace Domain.Concrete
             _context = context;
         }
 
-
-
-        public IRepository<Station> StationRepository => _stationRepository ?? (_stationRepository = new GenericRepository<Station>(_context));
-        public IRepository<RegulatorySchedule> RegulatoryScheduleRepository => _regulatoryScheduleRepository ?? (_regulatoryScheduleRepository = new GenericRepository<RegulatorySchedule>(_context));
-        public IRepository<OperativeSchedule> OperativeScheduleRepository => _operativeScheduleRepository ?? (_operativeScheduleRepository = new GenericRepository<OperativeSchedule>(_context));
-        public IRepository<RailwayStation> RailwayStationRepository => _railwayStationRepository ?? (_railwayStationRepository = new GenericRepository<RailwayStation>(_context));
-        public IRepository<Diagnostic> DiagnosticRepository => _diagnosticRepository ?? (_diagnosticRepository = new GenericRepository<Diagnostic>(_context));
-        public IRepository<Info> InfoRepository => _infoRepository ?? (_infoRepository = new GenericRepository<Info>(_context));
 
 
 
@@ -45,7 +45,6 @@ namespace Domain.Concrete
         }
 
 
-
         public void UndoChanges()
         {
             foreach (var entity in _context.ChangeTracker.Entries())
@@ -57,6 +56,9 @@ namespace Domain.Concrete
 
         public void Dispose()
         {
+            var hash = _context.GetHashCode(); //DEBUG
+
+
             _context.Dispose();
         }
     }
