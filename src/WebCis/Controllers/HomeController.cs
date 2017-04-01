@@ -41,11 +41,11 @@ namespace WebCis.Controllers
         {
             //var stations = await _unitOfWork.StationRepository.Get().ToListAsync();
 
-            var stations= await _domainAcessLayer.GetAllStationByRailwayStationName("Ленинградский");
-            if (stations != null)
-            {
-                var railwayStationStationsModel = _mapper.Map<List<StationModel>>(stations);
-            }
+            //var stations= await _domainAcessLayer.GetAllStationByRailwayStationName("Ленинградский");
+            //if (stations != null)
+            //{
+            //    var railwayStationStationsModel = _mapper.Map<List<StationModel>>(stations);
+            //}
 
 
 

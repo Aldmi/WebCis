@@ -15,10 +15,10 @@ namespace Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Введите Ecp код станции")]
+        [Required]
         public int EcpCode { get; set; }
 
-        [Required(ErrorMessage = "Введите название станции")]
+        [Required]
         public string Name { get; set; }
 
         public string Description { get; set; }

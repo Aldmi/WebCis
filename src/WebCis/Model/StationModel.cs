@@ -8,12 +8,15 @@ namespace WebCis.Model
     {
         public int Id { get; set; }
 
+        [Display(Name = "ECP код")]
         [Required(ErrorMessage = "Введите Ecp код станции")]
         public int EcpCode { get; set; }
 
+        [Display(Name = "Название")]
         [Required(ErrorMessage = "Введите название станции")]
         public string Name { get; set; }
 
+        [Display(Name = "Описание")]
         public string Description { get; set; }
 
 

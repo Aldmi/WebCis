@@ -14,7 +14,7 @@ namespace Domain.Entities
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Введите название станции")]
+        [Required]
         [MaxLength(100)]
         public string Name { get; set; }
 
