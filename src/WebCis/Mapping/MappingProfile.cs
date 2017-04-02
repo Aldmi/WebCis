@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using WebCis.Model;
+using WebCis.ViewModel;
 
 namespace WebCis.Mapping
 {
@@ -8,11 +9,11 @@ namespace WebCis.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<Station, StationModel>();
-            CreateMap<StationModel, Station>();
+            CreateMap<StationDto, StationViewModel>();
+            CreateMap<StationViewModel, StationDto>();
 
-            CreateMap<RailwayStation, RailwayStationModel>();
-            CreateMap<RailwayStationModel, RailwayStation>();
+            CreateMap<RailwayStationDto, RailwayStationViewModel>();
+            CreateMap<RailwayStationViewModel, RailwayStationDto>();
         }
     }
 }

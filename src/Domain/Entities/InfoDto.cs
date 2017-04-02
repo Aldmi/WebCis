@@ -11,14 +11,14 @@ namespace Domain.Entities
     /// Пересчет данных номера пути(платформы) прибытия и времени опоздания производится непрерывно в режиме реального времени для поездов из списка оперативного расписанияиз списка оперативного расписания.
     /// Не содержит поезда уже прибывшие или отправившиеся  со станции. 
     /// </summary>
-    public class Info : IEntitie
+    public class InfoDto : IEntitie
     {
         [Key]
         public int Id { get; set; }
 
-        public virtual Station DispatchStation { get; set; }       //Станция отправления
+        public virtual StationDto DispatchStationDto { get; set; }       //Станция отправления
 
-        public virtual Station DestinationStation { get; set; }    //Станция назначения
+        public virtual StationDto DestinationStationDto { get; set; }    //Станция назначения
 
         [Column(TypeName = "datetime2")]
         public DateTime? ArrivalTime { get; set; }                 //Время прибытия поезда на станцию

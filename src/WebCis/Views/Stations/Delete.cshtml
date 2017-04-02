@@ -1,6 +1,7 @@
 ﻿@using WebCis.Model;
+@using WebCis.ViewModel
 
-@model StationModel
+@model WebCis.ViewModel.StationViewModel
 
 
 @{
@@ -8,4 +9,30 @@
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+
+<h3>Вы действительно хотите удалить станцию?</h3>
+<div>
+    <h4>Movie</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EcpCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EcpCode)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Удалить" class="btn-danger" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

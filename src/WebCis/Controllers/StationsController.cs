@@ -9,6 +9,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebCis.Model;
+using WebCis.ViewModel;
 
 
 namespace WebCis.Controllers
@@ -44,10 +45,10 @@ namespace WebCis.Controllers
         // GET: Stations
         public async Task<IActionResult> Index(string stationsNameFilter)
         {
-            var stations = await _domainAcessLayer.GetAllStationByRailwayStationName("Ленинградский");
+            var stations = await _domainAcessLayer.GetAllStation("Ленинградский");
             if (stations != null)
             {
-                IEnumerable<StationModel> railwayStationStationsVm = _mapper.Map<List<StationModel>>(stations);
+                IEnumerable<StationViewModel> railwayStationStationsVm = _mapper.Map<List<StationViewModel>>(stations);
 
                 if (!string.IsNullOrEmpty(stationsNameFilter))
                 {
@@ -59,7 +60,6 @@ namespace WebCis.Controllers
 
             return NotFound();
         }
-
 
 
         // GET: Stations/Details/5
@@ -76,8 +76,8 @@ namespace WebCis.Controllers
                 return NotFound();
             }
 
-           var stationModel= _mapper.Map<StationModel>(station);
-            return View(stationModel);
+            var stationVm= _mapper.Map<StationViewModel>(station);
+            return View(stationVm);
         }
 
 
@@ -92,15 +92,15 @@ namespace WebCis.Controllers
         // POST: Stations/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,EcpCode,Description")] StationModel stationModel)
+        public async Task<IActionResult> Create([Bind("Id,Name,EcpCode,Description")] StationViewModel stationViewModel)
         {
             if (ModelState.IsValid)
             {
-              var stationDto= _mapper.Map<Station>(stationModel);
+              var stationDto= _mapper.Map<StationDto>(stationViewModel);
               await _domainAcessLayer.AddNewStation(stationDto, "Ленинградский");
               return RedirectToAction("Index");
             }
-            return View(stationModel);
+            return View(stationViewModel);
         }
 
 
@@ -119,8 +119,8 @@ namespace WebCis.Controllers
                 return NotFound();
             }
 
-            var stationModel = _mapper.Map<StationModel>(station);
-            return View(stationModel);
+            var stationVm = _mapper.Map<StationViewModel>(station);
+            return View(stationVm);
         }
 
 
@@ -128,21 +128,21 @@ namespace WebCis.Controllers
         // POST: Stations/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,EcpCode,Description")] StationModel stationModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,EcpCode,Description")] StationViewModel stationViewModel)
         {
-            if (id != stationModel.Id)
+            if (id != stationViewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-              var stationDto = _mapper.Map<Station>(stationModel);
+              var stationDto = _mapper.Map<StationDto>(stationViewModel);
               var result= await _domainAcessLayer.EditStation(stationDto);
                 
               return result ? RedirectToAction("Index") : null;    //TODO: null заменить на страницу с ошибками.
             }
-            return View(stationModel);
+            return View(stationViewModel);
         }
 
 
@@ -154,28 +154,38 @@ namespace WebCis.Controllers
                 return NotFound();
             }
 
-            //var movie = await _context.Movie
-            //    .SingleOrDefaultAsync(m => m.Id == id);
-            //if (movie == null)
-            //{
-            //    return NotFound();
-            //}
+            var station = await _domainAcessLayer.GetStationById(id.Value);
+            if (station == null)
+            {
+                return NotFound();
+            }
+            if (station.Name == "НЕИЗВЕСТНО")
+            {
+                return NotFound();           //TODO: вернуть страницу с ошибкой, на которой написанно "станцию НЕИЗВЕСТНО удалить невозможно."
+            }
 
-            return View();
+            var stationVm = _mapper.Map<StationViewModel>(station);
+
+            return View(stationVm);
         }
 
 
 
-        // POST: Movies/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var movie = await _context.Movie.SingleOrDefaultAsync(m => m.Id == id);
-        //    _context.Movie.Remove(movie);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
+        //POST: Stations/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var stationDeleting = await _domainAcessLayer.GetStationById(id);
+            if (stationDeleting == null)
+            {
+                return NotFound();
+            }
+
+           var result= await _domainAcessLayer.RemoveStationById(id);
+
+           return result ? RedirectToAction("Index") : null;    //TODO: null заменить на страницу с ошибками.
+        }
 
     }
 }

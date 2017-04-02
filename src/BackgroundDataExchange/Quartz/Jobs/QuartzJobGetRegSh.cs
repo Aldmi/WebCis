@@ -12,7 +12,7 @@ namespace BackgroundDataExchange.Quartz.Jobs
             //Получение данных установленных в dataMap для данного ключа job
             //JobDataMap dataMap = context.JobDetail.JobDataMap;
             //var apkDk = dataMap["ApkDkWebClient"] as ApkDkWebClient;
-            //var stationsOwner = dataMap["stationsOwner"] as IEnumerable<Station>;
+            //var stationsOwner = dataMap["stationsOwner"] as IEnumerable<StationDto>;
 
             //if(apkDk == null || stationsOwner == null)
             //    return;
@@ -52,14 +52,14 @@ namespace BackgroundDataExchange.Quartz.Jobs
 
 
 
-            //new Station { Name = "Курский", EcpCode = 19155 },
-            //new Station { Name = "Павелецкий", EcpCode = 19351 },
-            //new Station { Name = "Казанский", EcpCode = 19390 },
-            //new Station { Name = "Ярославский", EcpCode = 19550 },
-            //new Station { Name = "Савеловский", EcpCode = 19600 },
-            //new Station { Name = "Рижский", EcpCode = 19612 },
-            //new Station { Name = "Киевский", EcpCode = 19810 },
-            //new Station { Name = "Смоленский", EcpCode = 19823 }
+            //new StationDto { Name = "Курский", EcpCode = 19155 },
+            //new StationDto { Name = "Павелецкий", EcpCode = 19351 },
+            //new StationDto { Name = "Казанский", EcpCode = 19390 },
+            //new StationDto { Name = "Ярославский", EcpCode = 19550 },
+            //new StationDto { Name = "Савеловский", EcpCode = 19600 },
+            //new StationDto { Name = "Рижский", EcpCode = 19612 },
+            //new StationDto { Name = "Киевский", EcpCode = 19810 },
+            //new StationDto { Name = "Смоленский", EcpCode = 19823 }
         }
     }
 }

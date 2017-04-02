@@ -24,6 +24,9 @@ namespace Domain.Abstract
         void Remove(TEntity entity);
         void RemoveRange(List<TEntity> entitys);
 
+        Task<bool> Exists(int id);
+        Task<bool> Exists(TEntity entity);
+
 
         IList<TEntity> GetAll(params Expression<Func<TEntity, object>>[] navigationProperties);
     }

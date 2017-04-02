@@ -8,9 +8,10 @@ using Domain.DbContext;
 namespace Domain.Migrations
 {
     [DbContext(typeof(CisDbContext))]
-    partial class CisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170402150934_changeTableName")]
+    partial class changeTableName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

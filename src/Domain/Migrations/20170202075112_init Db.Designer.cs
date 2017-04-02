@@ -17,7 +17,7 @@ namespace Domain.Migrations
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Domain.Entities.Diagnostic", b =>
+            modelBuilder.Entity("Domain.Entities.DiagnosticDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -38,7 +38,7 @@ namespace Domain.Migrations
                     b.ToTable("Diagnostics");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RailwayStation", b =>
+            modelBuilder.Entity("Domain.Entities.RailwayStationDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -91,7 +91,7 @@ namespace Domain.Migrations
                     b.ToTable("RegShStationsListWithOutStops");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RegulatorySchedule", b =>
+            modelBuilder.Entity("Domain.Entities.RegulatoryScheduleDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -128,7 +128,7 @@ namespace Domain.Migrations
                     b.ToTable("RegulatorySchedules");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Station", b =>
+            modelBuilder.Entity("Domain.Entities.StationDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -148,12 +148,12 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entities.RailwayStStationStations", b =>
                 {
-                    b.HasOne("Domain.Entities.RailwayStation", "RailwayStation")
+                    b.HasOne("Domain.Entities.RailwayStationDto", "RailwayStationDto")
                         .WithMany("Stations")
                         .HasForeignKey("RailStId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Domain.Entities.Station", "Station")
+                    b.HasOne("Domain.Entities.StationDto", "StationDto")
                         .WithMany("RailwayStations")
                         .HasForeignKey("StatId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -161,12 +161,12 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entities.RegShStationsListOfStops", b =>
                 {
-                    b.HasOne("Domain.Entities.RegulatorySchedule", "RegulatorySchedule")
+                    b.HasOne("Domain.Entities.RegulatoryScheduleDto", "RegulatoryScheduleDto")
                         .WithMany("ListOfStops")
                         .HasForeignKey("RegShId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Domain.Entities.Station", "Station")
+                    b.HasOne("Domain.Entities.StationDto", "StationDto")
                         .WithMany("RegulatorySchedulesListOfStops")
                         .HasForeignKey("StatId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -174,28 +174,28 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entities.RegShStationsListWithOutStops", b =>
                 {
-                    b.HasOne("Domain.Entities.RegulatorySchedule", "RegulatorySchedule")
+                    b.HasOne("Domain.Entities.RegulatoryScheduleDto", "RegulatoryScheduleDto")
                         .WithMany("ListWithoutStops")
                         .HasForeignKey("RegShId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Domain.Entities.Station", "Station")
+                    b.HasOne("Domain.Entities.StationDto", "StationDto")
                         .WithMany("RegulatorySchedulesListWithoutStops")
                         .HasForeignKey("StatId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Domain.Entities.RegulatorySchedule", b =>
+            modelBuilder.Entity("Domain.Entities.RegulatoryScheduleDto", b =>
                 {
-                    b.HasOne("Domain.Entities.Station", "DestinationStation")
+                    b.HasOne("Domain.Entities.StationDto", "DestinationStationDto")
                         .WithMany("RegulatoryScheduleDestinationStations")
                         .HasForeignKey("DestId");
 
-                    b.HasOne("Domain.Entities.Station", "DispatchStation")
+                    b.HasOne("Domain.Entities.StationDto", "DispatchStationDto")
                         .WithMany("RegulatoryScheduleDispatchStations")
                         .HasForeignKey("DispId");
 
-                    b.HasOne("Domain.Entities.RailwayStation", "RailwayStation")
+                    b.HasOne("Domain.Entities.RailwayStationDto", "RailwayStationDto")
                         .WithMany("RegulatorySchedules")
                         .HasForeignKey("RailwayStId")
                         .OnDelete(DeleteBehavior.Cascade);

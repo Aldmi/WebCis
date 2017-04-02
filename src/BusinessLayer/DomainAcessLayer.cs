@@ -36,17 +36,17 @@ namespace BusinessLayer
 
         #region Methode
 
-        public async Task<IList<Station>> GetAllStationByRailwayStationName(string nameRailwayStation)
+        public async Task<IList<StationDto>> GetAllStation(string nameRailwayStation)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
                 var railwayStation = await uow.RailwayStationRepository.Get().
                     Include(st => st.Stations).
-                    ThenInclude(st => st.Station).
+                    ThenInclude(st => st.StationDto).
                     AsNoTracking().
                     FirstOrDefaultAsync(n => n.Name.Equals(nameRailwayStation));
 
-                return railwayStation.Stations.Select(st => st.Station).ToList();
+                return railwayStation.Stations.Select(st => st.StationDto).ToList();
             }
         }
 
@@ -55,7 +55,7 @@ namespace BusinessLayer
         /// Получить станцию по Id из всего репозитория Станций.
         /// Если указанно имя вокзала, то вначале отфильтровать станции относяшиеся к этому вокзалу.
         /// </summary>
-        public async Task<Station> GetStationById(int id, string nameRailwayStation = null)
+        public async Task<StationDto> GetStationById(int id, string nameRailwayStation = null)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
@@ -66,25 +66,25 @@ namespace BusinessLayer
 
                 var railwayStation = await uow.RailwayStationRepository.Get().
                     Include(st => st.Stations).
-                    ThenInclude(st => st.Station).
+                    ThenInclude(st => st.StationDto).
                     AsNoTracking().
                     FirstOrDefaultAsync(n => n.Name.Equals(nameRailwayStation));
 
 
-                return railwayStation?.Stations.FirstOrDefault(st => st.StatId == id)?.Station;
+                return railwayStation?.Stations.FirstOrDefault(st => st.StatId == id)?.StationDto;
             }
         }
 
 
 
-        public async Task AddNewStation(Station stationDto, string nameRailwayStation)
+        public async Task AddNewStation(StationDto stationDtoDto, string nameRailwayStation)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
                 if(string.IsNullOrEmpty(nameRailwayStation))
                     return;
 
-                if(stationDto == null)
+                if(stationDtoDto == null)
                     return;
 
                 var railwayStation = await uow.RailwayStationRepository.Get().Include(rs=>rs.Stations).FirstOrDefaultAsync(n => n.Name.Equals("Ленинградский"));
@@ -93,7 +93,7 @@ namespace BusinessLayer
                     railwayStation.Stations.Add(new RailwayStStationStations
                     {
                         RailStId = railwayStation.Id,
-                        Station = stationDto
+                        StationDto = stationDtoDto
                     });
                     await uow.SaveAsync();
                 }
@@ -101,11 +101,11 @@ namespace BusinessLayer
         }
 
 
-        public async Task AddNewStation(Station stationDto, int idRailwayStation)
+        public async Task AddNewStation(StationDto stationDtoDto, int idRailwayStation)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
-                if (stationDto == null)
+                if (stationDtoDto == null)
                     return;
 
                 var railwayStation = await uow.RailwayStationRepository.GetByIdAsync(idRailwayStation);
@@ -114,7 +114,7 @@ namespace BusinessLayer
                     railwayStation.Stations.Add(new RailwayStStationStations
                     {
                         RailStId = railwayStation.Id,
-                        Station = stationDto
+                        StationDto = stationDtoDto
                     });
                     await uow.SaveAsync();
                 }
@@ -122,16 +122,16 @@ namespace BusinessLayer
         }
 
 
-        public async Task<bool> EditStation(Station stationDto)
+        public async Task<bool> EditStation(StationDto stationDtoDto)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
                 try
                 {
-                    var findStation = uow.StationRepository.GetById(stationDto.Id);
+                    var findStation = uow.StationRepository.GetById(stationDtoDto.Id);
                     if (findStation != null)
                     {
-                        findStation = stationDto;
+                        findStation = stationDtoDto;
                         uow.StationRepository.Update(findStation);
                         await uow.SaveAsync();
                         return true;
@@ -140,7 +140,7 @@ namespace BusinessLayer
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    var findStation = uow.StationRepository.GetById(stationDto.Id);             
+                    var findStation = uow.StationRepository.GetById(stationDtoDto.Id);             
                     if (findStation != null)        //уже удалили из паралельного потока
                     {
                         return false;
@@ -152,9 +152,60 @@ namespace BusinessLayer
 
 
 
+        public async Task<bool> RemoveStationById(int id)
+        {
+            using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
+            {
+                try
+                {
+                    var station = await uow.StationRepository.GetByIdAsync(id);
+                    if (station != null)
+                    {
+                        uow.StationRepository.Remove(station);
+                        await uow.SaveAsync();
+                        return true;
+                    }
+                    return false;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    var findStation = uow.StationRepository.GetById(id);
+                    if (findStation != null)         //уже удалили из паралельного потока
+                    {
+                        return false;
+                    }
+                    throw;
+                }
+            }
+        }
 
 
 
+        public async Task<bool> RemoveStation(StationDto stationDto)
+        {
+            using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
+            {
+                try
+                {
+                    if (stationDto != null && await uow.StationRepository.Exists(stationDto))
+                    {
+                        uow.StationRepository.Remove(stationDto);
+                        await uow.SaveAsync();
+                        return true;
+                    }
+                    return false;
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    var findStation = uow.StationRepository.GetById(stationDto.Id);
+                    if (findStation != null)         //уже удалили из паралельного потока
+                    {
+                        return false;
+                    }
+                    throw;
+                }
+            }
+        }
 
         #endregion
 

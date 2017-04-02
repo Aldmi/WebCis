@@ -1,0 +1,9 @@
+D:\Git\WebCis\src\BusinessLayer\bin\Debug\netcoreapp1.1\BusinessLayer.deps.json
+D:\Git\WebCis\src\BusinessLayer\bin\Debug\netcoreapp1.1\BusinessLayer.dll
+D:\Git\WebCis\src\BusinessLayer\bin\Debug\netcoreapp1.1\BusinessLayer.pdb
+D:\Git\WebCis\src\BusinessLayer\bin\Debug\netcoreapp1.1\Domain.dll
+D:\Git\WebCis\src\BusinessLayer\bin\Debug\netcoreapp1.1\Domain.pdb
+D:\Git\WebCis\src\BusinessLayer\obj\Debug\netcoreapp1.1\BusinessLayer.csprojResolveAssemblyReference.cache
+D:\Git\WebCis\src\BusinessLayer\obj\Debug\netcoreapp1.1\BusinessLayer.AssemblyInfo.cs
+D:\Git\WebCis\src\BusinessLayer\obj\Debug\netcoreapp1.1\BusinessLayer.dll
+D:\Git\WebCis\src\BusinessLayer\obj\Debug\netcoreapp1.1\BusinessLayer.pdb

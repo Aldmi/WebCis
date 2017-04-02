@@ -15,7 +15,7 @@ namespace Domain.Entities
     /// Данные нормативного расписания предназначены для формирования информации на табло с общим расписанием движения поездов по станции
     /// Пересчет нормативного расписания осуществляется один раз в сутки.
     /// </summary>
-    public class RegulatorySchedule : IEntitie
+    public class RegulatoryScheduleDto : IEntitie
     {
         [Key]
         public int Id { get; set; }
@@ -37,10 +37,10 @@ namespace Domain.Entities
 
 
         public int DispId { get; set; }
-        public virtual Station DispatchStation { get; set; }        //Станция отправления
+        public virtual StationDto DispatchStationDto { get; set; }        //Станция отправления
 
         public int DestId { get; set; }
-        public virtual Station DestinationStation { get; set; }     //Станция назначения
+        public virtual StationDto DestinationStationDto { get; set; }     //Станция назначения
 
 
         public virtual List<RegShStationsListOfStops> ListOfStops { get; set; }           //Список станций где останавливается поезд (Заполнятся только для пригородных поездов)
@@ -49,7 +49,7 @@ namespace Domain.Entities
 
 
         public int RailwayStId { get; set; }
-        public virtual RailwayStation RailwayStation { get; set; }        //Обязательно относится к вокзалу     
+        public virtual RailwayStationDto RailwayStationDto { get; set; }        //Обязательно относится к вокзалу     
     }
 
 }

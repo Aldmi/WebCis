@@ -10,7 +10,7 @@ namespace BackgroundDataExchange.Quartz.Shedules
 {
     public class QuartzApkDkReglamentRegSh
     {
-        //public static async Task Start(ApkDkWebClient apkDkWebClient, IEnumerable<Station> stationsOwner )
+        //public static async Task Start(ApkDkWebClient apkDkWebClient, IEnumerable<StationDto> stationsOwner )
         //{
         //    //Планировщик
         //    var scheduler =await StdSchedulerFactory.GetDefaultScheduler();

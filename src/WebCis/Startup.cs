@@ -51,9 +51,7 @@ namespace WebCis
             // создание объекта MainSetting по ключам из конфигурации
             services.Configure<MainSetting>(Configuration);
 
-            // EF
-            //var connection = @"Server=(localdb)\mssqllocaldb;Database=CisDb_test;Trusted_Connection=True;";
-            //services.AddDbContext<CisDbContext>(options => options.UseSqlServer(connection));
+
 
             // Add framework services.
             services.AddMvc();
@@ -64,6 +62,11 @@ namespace WebCis
             // DomainAcessLayer
             var connection = @"Server=(localdb)\mssqllocaldb;Database=CisDb_test;Trusted_Connection=True;"; //TODO: брать из настроек
             services.AddScoped<IDomainAcessLayer>(provider => new DomainAcessLayer(connection));//на каждый запрос свой объект
+
+
+            // EF DEBUG for SeedData only  !!!!!!!!!!!!!!!
+            services.AddDbContext<CisDbContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,8 +101,8 @@ namespace WebCis
 
         private async Task Initialize(IServiceProvider serviceProvider)
         {
-            var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
-            await SeedData.Initialize(unitOfWork);
+           var unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+           await SeedData.Initialize(unitOfWork);
 
             //QuartzApkDkReglamentRegSh.Start();
 

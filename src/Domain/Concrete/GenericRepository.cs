@@ -114,5 +114,17 @@ namespace Domain.Concrete
         {
             DbSet.RemoveRange(entitys);
         }
+
+
+        public virtual async Task<bool> Exists(int id)
+        {
+            return await DbSet.AnyAsync(e=>e.Id == id);
+        }
+
+
+        public virtual async Task<bool> Exists(TEntity entity)
+        {
+            return await DbSet.AnyAsync(e => e.Id == entity.Id);
+        }
     }
 }

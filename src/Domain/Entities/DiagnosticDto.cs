@@ -9,7 +9,7 @@ namespace Domain.Entities
     /// Диагностика оборудования автодиктора
     /// Данные о техническом состоянии устройств системы информирования пассажиров.
     /// </summary>
-    public class Diagnostic : IEntitie
+    public class DiagnosticDto : IEntitie
     {
         [Key]
         public int Id { get; set; }

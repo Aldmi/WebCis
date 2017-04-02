@@ -6,17 +6,17 @@ namespace Domain.Abstract
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Station> StationRepository { get; }                                 //Станции
+        IRepository<StationDto> StationRepository { get; }                                 //Станции
 
-        IRepository<RegulatorySchedule> RegulatoryScheduleRepository { get; }           //Регулярное расписание
+        IRepository<RegulatoryScheduleDto> RegulatoryScheduleRepository { get; }           //Регулярное расписание
 
-        IRepository<OperativeSchedule> OperativeScheduleRepository { get; }             //Оперативное расписание
+        IRepository<OperativeScheduleDto> OperativeScheduleRepository { get; }             //Оперативное расписание
 
-        IRepository<RailwayStation> RailwayStationRepository { get; }                   //Вокзалы
+        IRepository<RailwayStationDto> RailwayStationRepository { get; }                   //Вокзалы
 
-        IRepository<Diagnostic> DiagnosticRepository { get; }                           //Диагностика оборудования автодиктора
+        IRepository<DiagnosticDto> DiagnosticRepository { get; }                           //Диагностика оборудования автодиктора
 
-        IRepository<Info> InfoRepository { get; }                                       //Оперативная информация про поезда
+        IRepository<InfoDto> InfoRepository { get; }                                       //Оперативная информация про поезда
 
 
 

@@ -12,7 +12,7 @@ namespace Domain.Entities
     /// Данные оперативного расписания предназначены для формирования информации на  табло содержащих сведения о ближайших поездах по станции.
     /// Пересчет оперативного расписания осуществляется два раза в сутки.
     /// </summary>
-    public class OperativeSchedule : IEntitie
+    public class OperativeScheduleDto : IEntitie
     {
         [Key]
         public int Id { get; set; }
@@ -25,9 +25,9 @@ namespace Domain.Entities
         [MaxLength(100)]
         public string RouteName { get; set; }                                          //Станция отправления и станция назначения, а также фирменное название поезда, если есть.
 
-        public virtual Station DispatchStation { get; set; }                           //Станция отправления
+        public virtual StationDto DispatchStationDto { get; set; }                     //Станция отправления
 
-        public virtual Station DestinationStation { get; set; }                        //Станция назначения
+        public virtual StationDto DestinationStationDto { get; set; }                  //Станция назначения
 
         [Column(TypeName = "datetime2")]
         public DateTime? ArrivalTime { get; set; }                                      //Время прибытия поезда на станцию
@@ -35,15 +35,15 @@ namespace Domain.Entities
         [Column(TypeName = "datetime2")]
         public DateTime? DepartureTime { get; set; }                                     //Время отправления поезда со станции
 
-        public virtual ObservableCollection<Station> ListOfStops { get; set; }          //Список станций где останавливается поезд (Заполнятся только для пригородных поездов)
+        public virtual ObservableCollection<StationDto> ListOfStops { get; set; }          //Список станций где останавливается поезд (Заполнятся только для пригородных поездов)
 
-        public virtual ObservableCollection<Station> ListWithoutStops { get; set; }     //Список станций которые поезд
+        public virtual ObservableCollection<StationDto> ListWithoutStops { get; set; }     //Список станций которые поезд
 
 
         #region FK
 
         [Required]
-        public RailwayStation RailwayStation { get; set; }                              //Обязательно относится к вокзалу            
+        public RailwayStationDto RailwayStationDto { get; set; }                              //Обязательно относится к вокзалу            
 
         #endregion
     }

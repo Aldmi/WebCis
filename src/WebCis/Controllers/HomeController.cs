@@ -41,24 +41,24 @@ namespace WebCis.Controllers
         {
             //var stations = await _unitOfWork.StationRepository.Get().ToListAsync();
 
-            //var stations= await _domainAcessLayer.GetAllStationByRailwayStationName("Ленинградский");
+            //var stations= await _domainAcessLayer.GetAllStation("Ленинградский");
             //if (stations != null)
             //{
-            //    var railwayStationStationsModel = _mapper.Map<List<StationModel>>(stations);
+            //    var railwayStationStationsModel = _mapper.Map<List<StationViewModel>>(stations);
             //}
 
 
 
             //var railwayStation = await _unitOfWork.RailwayStationRepository.Get().
             //    Include(st => st.Stations).
-            //    ThenInclude(st => st.Station).
+            //    ThenInclude(st => st.StationDto).
             //    AsNoTracking().
             //    FirstOrDefaultAsync(n => n.Name.Equals("Ленинградский"));
 
-            //var railwayStationStations = railwayStation?.Stations.Select(st => st.Station).ToList();
+            //var railwayStationStations = railwayStation?.Stations.Select(st => st.StationDto).ToList();
             //if (railwayStationStations != null)
             //{
-            //    var railwayStationStationsModel = _mapper.Map<List<StationModel>>(railwayStationStations);
+            //    var railwayStationStationsModel = _mapper.Map<List<StationViewModel>>(railwayStationStations);
             //}
 
             return View();
@@ -71,10 +71,10 @@ namespace WebCis.Controllers
         {
             //test добавление новой станции в вокзал
 
-            //StationModel stationModel = new StationModel { EcpCode = 98521, Name = "НоваяСтанция1", Description = "Описание новой станции1" };
-            //Station stationDto = _mapper.Map<Station>(stationModel);
+            //StationViewModel stationModel = new StationViewModel { EcpCode = 98521, Name = "НоваяСтанция1", Description = "Описание новой станции1" };
+            //StationDto stationDtoDto = _mapper.Map<StationDto>(stationModel);
             //var railwayStation = await _unitOfWork.RailwayStationRepository.Get().FirstOrDefaultAsync(n => n.Name.Equals("Ленинградский"));
-            //railwayStation.Stations.Add(new RailwayStStationStations { RailStId = railwayStation.Id, Station = stationDto });
+            //railwayStation.Stations.Add(new RailwayStStationStations { RailStId = railwayStation.Id, StationDto = stationDtoDto });
 
             //await _unitOfWork.SaveAsync();
 
@@ -97,10 +97,10 @@ namespace WebCis.Controllers
             //    FirstOrDefaultAsync(n => n.Name.Equals("Ленинградский"));
 
 
-            //var station = _unitOfWork.StationRepository.GetById(stationId);
+            //var stationDto = _unitOfWork.StationRepository.GetById(stationId);
 
-            //station.Name = "Измененное имя станции1";
-            //_unitOfWork.StationRepository.Update(station);
+            //stationDto.Name = "Измененное имя станции1";
+            //_unitOfWork.StationRepository.Update(stationDto);
             //await _unitOfWork.SaveAsync();
 
             ViewData["Message"] = "Your contact page.";

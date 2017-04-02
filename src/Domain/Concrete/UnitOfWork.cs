@@ -9,19 +9,19 @@ namespace Domain.Concrete
     {
         private readonly CisDbContext _context;
 
-        private GenericRepository<Station> _stationRepository;
-        private GenericRepository<RegulatorySchedule> _regulatoryScheduleRepository;
-        private GenericRepository<OperativeSchedule> _operativeScheduleRepository;
-        private GenericRepository<RailwayStation> _railwayStationRepository;
-        private GenericRepository<Diagnostic> _diagnosticRepository;
-        private GenericRepository<Info> _infoRepository;
+        private GenericRepository<StationDto> _stationRepository;
+        private GenericRepository<RegulatoryScheduleDto> _regulatoryScheduleRepository;
+        private GenericRepository<OperativeScheduleDto> _operativeScheduleRepository;
+        private GenericRepository<RailwayStationDto> _railwayStationRepository;
+        private GenericRepository<DiagnosticDto> _diagnosticRepository;
+        private GenericRepository<InfoDto> _infoRepository;
 
-        public IRepository<Station> StationRepository => _stationRepository ?? (_stationRepository = new GenericRepository<Station>(_context));
-        public IRepository<RegulatorySchedule> RegulatoryScheduleRepository => _regulatoryScheduleRepository ?? (_regulatoryScheduleRepository = new GenericRepository<RegulatorySchedule>(_context));
-        public IRepository<OperativeSchedule> OperativeScheduleRepository => _operativeScheduleRepository ?? (_operativeScheduleRepository = new GenericRepository<OperativeSchedule>(_context));
-        public IRepository<RailwayStation> RailwayStationRepository => _railwayStationRepository ?? (_railwayStationRepository = new GenericRepository<RailwayStation>(_context));
-        public IRepository<Diagnostic> DiagnosticRepository => _diagnosticRepository ?? (_diagnosticRepository = new GenericRepository<Diagnostic>(_context));
-        public IRepository<Info> InfoRepository => _infoRepository ?? (_infoRepository = new GenericRepository<Info>(_context));
+        public IRepository<StationDto> StationRepository => _stationRepository ?? (_stationRepository = new GenericRepository<StationDto>(_context));
+        public IRepository<RegulatoryScheduleDto> RegulatoryScheduleRepository => _regulatoryScheduleRepository ?? (_regulatoryScheduleRepository = new GenericRepository<RegulatoryScheduleDto>(_context));
+        public IRepository<OperativeScheduleDto> OperativeScheduleRepository => _operativeScheduleRepository ?? (_operativeScheduleRepository = new GenericRepository<OperativeScheduleDto>(_context));
+        public IRepository<RailwayStationDto> RailwayStationRepository => _railwayStationRepository ?? (_railwayStationRepository = new GenericRepository<RailwayStationDto>(_context));
+        public IRepository<DiagnosticDto> DiagnosticRepository => _diagnosticRepository ?? (_diagnosticRepository = new GenericRepository<DiagnosticDto>(_context));
+        public IRepository<InfoDto> InfoRepository => _infoRepository ?? (_infoRepository = new GenericRepository<InfoDto>(_context));
 
 
 
