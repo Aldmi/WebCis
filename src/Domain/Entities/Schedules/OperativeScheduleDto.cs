@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Entities.RailwayStations;
+using Domain.Entities;
 
-namespace Domain.Entities
+
+namespace Domain.Entities.Schedules
 {
     /// <summary>
     /// Оперативное расписание поездов.

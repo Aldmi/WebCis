@@ -8,9 +8,10 @@ using Domain.DbContext;
 namespace Domain.Migrations
 {
     [DbContext(typeof(CisDbContext))]
-    partial class CisDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170510142214_111")]
+    partial class _111
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -88,19 +89,6 @@ namespace Domain.Migrations
                     b.HasIndex("StatId");
 
                     b.ToTable("RegShStationsListWithOutStops");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RegShStationsRouteRoutes", b =>
-                {
-                    b.Property<int>("RegShId");
-
-                    b.Property<int>("StatRouteId");
-
-                    b.HasKey("RegShId", "StatRouteId");
-
-                    b.HasIndex("StatRouteId");
-
-                    b.ToTable("RegShStationsRouteRoutes");
                 });
 
             modelBuilder.Entity("Domain.Entities.RegulatoryScheduleDto", b =>
@@ -215,19 +203,6 @@ namespace Domain.Migrations
                     b.HasOne("Domain.Entities.StationDto", "StationDto")
                         .WithMany("RegulatorySchedulesListWithoutStops")
                         .HasForeignKey("StatId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Domain.Entities.RegShStationsRouteRoutes", b =>
-                {
-                    b.HasOne("Domain.Entities.RegulatoryScheduleDto", "RegulatoryScheduleDto")
-                        .WithMany("Route")
-                        .HasForeignKey("RegShId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Domain.Entities.StationsRouteDto", "StationRouteDto")
-                        .WithMany("RegShRoutes")
-                        .HasForeignKey("StatRouteId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

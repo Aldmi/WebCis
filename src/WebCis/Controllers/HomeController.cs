@@ -5,9 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using BusinessLayer;
-using Domain.Abstract;
-using Domain.Entities;
+using BusinessLayer.DtoAccessLayer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -15,20 +13,22 @@ using WebCis.Model;
 using WebCis.Settings;
 
 
+
+
 namespace WebCis.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IDomainAcessLayer _domainAcessLayer;
+        private readonly IStationDtoAccessLayer _stationDtoAcessLayer;
         private readonly IMapper _mapper;
         private readonly MainSetting _settingsOptions;
 
 
 
 
-        public HomeController(IDomainAcessLayer domainAcessLayer, IOptions<MainSetting> settingsOptions, IMapper mapper)
+        public HomeController(IStationDtoAccessLayer stationDtoAcessLayer, IOptions<MainSetting> settingsOptions, IMapper mapper)
         {
-            _domainAcessLayer = domainAcessLayer;
+            _stationDtoAcessLayer = stationDtoAcessLayer;
             _settingsOptions = settingsOptions.Value;
             _mapper = mapper;
         }
@@ -41,7 +41,7 @@ namespace WebCis.Controllers
         {
             //var stations = await _unitOfWork.StationRepository.Get().ToListAsync();
 
-            //var stations= await _domainAcessLayer.GetAllStation("Ленинградский");
+            //var stations= await _stationDtoAcessLayer.GetAllStation("Ленинградский");
             //if (stations != null)
             //{
             //    var railwayStationStationsModel = _mapper.Map<List<StationViewModel>>(stations);

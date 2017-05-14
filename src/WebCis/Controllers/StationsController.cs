@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BusinessLayer;
+using BusinessLayer.DtoAccessLayer;
 using Domain.Abstract;
 using Domain.Entities;
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using WebCis.Model;
 using WebCis.ViewModel;
@@ -18,7 +20,7 @@ namespace WebCis.Controllers
     {
         #region fileld
 
-        private readonly IDomainAcessLayer _domainAcessLayer;
+        private readonly IStationDtoAccessLayer _stationDtoAcessLayer;
         private readonly IMapper _mapper;
 
         #endregion
@@ -29,9 +31,9 @@ namespace WebCis.Controllers
 
         #region ctor
 
-        public StationsController(IDomainAcessLayer domainAcessLayer, IMapper mapper)
+        public StationsController(IStationDtoAccessLayer stationDtoAcessLayer, IMapper mapper)
         {
-            _domainAcessLayer = domainAcessLayer;
+            _stationDtoAcessLayer = stationDtoAcessLayer;
             _mapper = mapper;
         }
 
@@ -43,9 +45,10 @@ namespace WebCis.Controllers
 
 
         // GET: Stations
+        [Route("[controller]/[action]/{stationsNameFilter?}")]
         public async Task<IActionResult> Index(string stationsNameFilter)
         {
-            var stations = await _domainAcessLayer.GetAllStation("Ленинградский");
+            var stations = await _stationDtoAcessLayer.GetAllStation("Ленинградский");
             if (stations != null)
             {
                 IEnumerable<StationViewModel> railwayStationStationsVm = _mapper.Map<List<StationViewModel>>(stations);
@@ -63,6 +66,7 @@ namespace WebCis.Controllers
 
 
         // GET: Stations/Details/5
+        [Route("[controller]/[action]/{id:int}")]             //DEBUG ручное указание route для данного метода
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -70,7 +74,7 @@ namespace WebCis.Controllers
                 return NotFound();
             }
 
-            var station = await _domainAcessLayer.GetStationById(id.Value);
+            var station = await _stationDtoAcessLayer.GetStationById(id.Value);
             if (station == null)
             {
                 return NotFound();
@@ -83,6 +87,7 @@ namespace WebCis.Controllers
 
 
         // GET: Stations/Create
+        [Route("[controller]/[action]")]
         public IActionResult Create()
         {
             return View();
@@ -90,6 +95,7 @@ namespace WebCis.Controllers
 
 
         // POST: Stations/Create
+        [Route("[controller]/[action]")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,EcpCode,Description")] StationViewModel stationViewModel)
@@ -97,7 +103,7 @@ namespace WebCis.Controllers
             if (ModelState.IsValid)
             {
               var stationDto= _mapper.Map<StationDto>(stationViewModel);
-              await _domainAcessLayer.AddNewStation(stationDto, "Ленинградский");
+              await _stationDtoAcessLayer.AddNewStation(stationDto, "Ленинградский");
               return RedirectToAction("Index");
             }
             return View(stationViewModel);
@@ -106,6 +112,7 @@ namespace WebCis.Controllers
 
 
         // GET: Stations/Edit/5
+        [Route("[controller]/[action]/{id:int}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -113,7 +120,7 @@ namespace WebCis.Controllers
                 return NotFound();
             }
 
-            var station = await _domainAcessLayer.GetStationById(id.Value);
+            var station = await _stationDtoAcessLayer.GetStationById(id.Value);
             if (station == null)
             {
                 return NotFound();
@@ -126,6 +133,7 @@ namespace WebCis.Controllers
 
 
         // POST: Stations/Edit/5
+        [Route("[controller]/[action]/{id:int}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,EcpCode,Description")] StationViewModel stationViewModel)
@@ -138,7 +146,7 @@ namespace WebCis.Controllers
             if (ModelState.IsValid)
             {
               var stationDto = _mapper.Map<StationDto>(stationViewModel);
-              var result= await _domainAcessLayer.EditStation(stationDto);
+              var result= await _stationDtoAcessLayer.EditStation(stationDto);
                 
               return result ? RedirectToAction("Index") : null;    //TODO: null заменить на страницу с ошибками.
             }
@@ -147,6 +155,7 @@ namespace WebCis.Controllers
 
 
         // GET: Stations/Delete/5
+        [Route("[controller]/[action]/{id:int}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,7 +163,7 @@ namespace WebCis.Controllers
                 return NotFound();
             }
 
-            var station = await _domainAcessLayer.GetStationById(id.Value);
+            var station = await _stationDtoAcessLayer.GetStationById(id.Value);
             if (station == null)
             {
                 return NotFound();
@@ -172,17 +181,18 @@ namespace WebCis.Controllers
 
 
         //POST: Stations/Delete/5
+        [Route("[controller]/[action]/{id:int:required}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var stationDeleting = await _domainAcessLayer.GetStationById(id);
+            var stationDeleting = await _stationDtoAcessLayer.GetStationById(id);
             if (stationDeleting == null)
             {
                 return NotFound();
             }
 
-           var result= await _domainAcessLayer.RemoveStationById(id);
+           var result= await _stationDtoAcessLayer.RemoveStationById(id);
 
            return result ? RedirectToAction("Index") : null;    //TODO: null заменить на страницу с ошибками.
         }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.RailwayStations;
+
 using WebCis.Model;
 using WebCis.ViewModel;
 

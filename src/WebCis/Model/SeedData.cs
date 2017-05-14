@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain.Abstract;
 using Domain.Entities;
+using Domain.Entities.RailwayStations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebCis.Controllers;
@@ -88,8 +90,10 @@ namespace WebCis.Model
                         if(unknownSt == null)
                             return;
 
-                        var listRegSh = new List<RegulatoryScheduleDto>{
-                        new RegulatoryScheduleDto
+                        //------------------------------------
+                        var stations = await uow.StationRepository.Get().Where(st => true).ToListAsync();
+                        var routeStations= stations.Select(st=> new StationsRouteDto {StationDto = st, IsLanding = true, ArrivalTime = DateTime.Now}).ToList();
+                        var regSh = new RegulatoryScheduleDto
                         {
                             RailwayStId = railwatSt.Id,
                             ArrivalTime = DateTime.MaxValue,
@@ -98,39 +102,34 @@ namespace WebCis.Model
                             NumberOfTrain = "152",
                             RouteName = "Москва-Питер",
                             DestinationStationDto = unknownSt,
-                            DispatchStationDto = unknownSt
-                        },
-                        new RegulatoryScheduleDto
-                        {
-                            RailwayStId = railwatSt.Id,
-                            ArrivalTime = DateTime.MinValue,
-                            DepartureTime = new DateTime(2017, 5, 12),
-                            DaysFollowings = "Ежедневно",
-                            NumberOfTrain = "169",
-                            RouteName = "Тверь-Воркута",
-                            DestinationStationDto = unknownSt,
-                            DispatchStationDto = unknownSt
-                        },
-                        new RegulatoryScheduleDto
-                        {
-                            RailwayStId = railwatSt.Id,
-                            ArrivalTime = new DateTime(2017, 7, 25),
-                            DepartureTime = DateTime.Now,
-                            DaysFollowings = "Кроме выходных",
-                            NumberOfTrain = "1623",
-                            RouteName = "Тверь-Воркута",
-                            DestinationStationDto = unknownSt,
-                            DispatchStationDto = unknownSt
-                        }
+                            DispatchStationDto = unknownSt,
                         };
 
 
-                        uow.RegulatoryScheduleRepository.InsertRange(listRegSh);
+                        var routes = routeStations.Select(rs=> new RegShStationsRouteRoutes {StationRouteDto = rs, RegulatoryScheduleDto =  regSh}).ToList();
+                        regSh.Route = routes;
+
+                        uow.RegulatoryScheduleRepository.Insert(regSh);
                         await uow.SaveAsync();
                     }
 
 
 
+                    if (!await uow.StationRouteRepository.Get().AnyAsync())
+                    {
+                        var station = await uow.StationRepository.Get().FirstOrDefaultAsync(st => st.Name == "Станция 1");
+                        if (station != null)
+                        {
+                            var stRoute = new StationsRouteDto()
+                            {
+                                IsLanding = true,
+                                StationDtoId = station.Id,
+                                ArrivalTime = DateTime.Now
+                            };
+                            uow.StationRouteRepository.Insert(stRoute);
+                            await uow.SaveAsync();
+                        }
+                    }
                 }
             }
             catch (Exception e)

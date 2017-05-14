@@ -2,6 +2,9 @@
 using Domain.Abstract;
 using Domain.DbContext;
 using Domain.Entities;
+using Domain.Entities.RailwayStations;
+using Domain.Entities.Schedules;
+
 
 namespace Domain.Concrete
 {
@@ -10,6 +13,7 @@ namespace Domain.Concrete
         private readonly CisDbContext _context;
 
         private GenericRepository<StationDto> _stationRepository;
+        private GenericRepository<StationsRouteDto> _stationRouteRepository;
         private GenericRepository<RegulatoryScheduleDto> _regulatoryScheduleRepository;
         private GenericRepository<OperativeScheduleDto> _operativeScheduleRepository;
         private GenericRepository<RailwayStationDto> _railwayStationRepository;
@@ -17,6 +21,7 @@ namespace Domain.Concrete
         private GenericRepository<InfoDto> _infoRepository;
 
         public IRepository<StationDto> StationRepository => _stationRepository ?? (_stationRepository = new GenericRepository<StationDto>(_context));
+        public IRepository<StationsRouteDto> StationRouteRepository => _stationRouteRepository ?? (_stationRouteRepository = new GenericRepository<StationsRouteDto>(_context));
         public IRepository<RegulatoryScheduleDto> RegulatoryScheduleRepository => _regulatoryScheduleRepository ?? (_regulatoryScheduleRepository = new GenericRepository<RegulatoryScheduleDto>(_context));
         public IRepository<OperativeScheduleDto> OperativeScheduleRepository => _operativeScheduleRepository ?? (_operativeScheduleRepository = new GenericRepository<OperativeScheduleDto>(_context));
         public IRepository<RailwayStationDto> RailwayStationRepository => _railwayStationRepository ?? (_railwayStationRepository = new GenericRepository<RailwayStationDto>(_context));

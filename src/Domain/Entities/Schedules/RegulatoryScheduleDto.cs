@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Entities.RailwayStations;
+
 
 namespace Domain.Entities
 {
@@ -49,7 +51,11 @@ namespace Domain.Entities
 
 
         public int RailwayStId { get; set; }
-        public virtual RailwayStationDto RailwayStationDto { get; set; }        //Обязательно относится к вокзалу     
+        public virtual RailwayStationDto RailwayStationDto { get; set; }        //Обязательно относится к вокзалу  
+
+
+
+        public ICollection<RegShStationsRouteRoutes> Route { get; set; }          //маршрут
     }
 
 }

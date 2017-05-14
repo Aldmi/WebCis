@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BusinessLayer;
+using BusinessLayer.DtoAccessLayer;
 using Domain.Abstract;
 using Domain.Concrete;
 using Domain.DbContext;
@@ -39,8 +39,10 @@ namespace WebCis
             });
         }
 
+
         public IConfigurationRoot Configuration { get; }
         private MapperConfiguration MapperConfiguration { get; set; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -51,23 +53,23 @@ namespace WebCis
             // создание объекта MainSetting по ключам из конфигурации
             services.Configure<MainSetting>(Configuration);
 
-
-
             // Add framework services.
             services.AddMvc();
 
             //Mapper
             services.AddSingleton<IMapper>(sp => MapperConfiguration.CreateMapper());
 
-            // DomainAcessLayer
+            // StationDtoAcessLayer
             var connection = @"Server=(localdb)\mssqllocaldb;Database=CisDb_test;Trusted_Connection=True;"; //TODO: брать из настроек
-            services.AddScoped<IDomainAcessLayer>(provider => new DomainAcessLayer(connection));//на каждый запрос свой объект
+            services.AddScoped<IStationDtoAccessLayer>(provider => new StationsDtoAccessLayer(connection));//на каждый запрос свой объект
+            services.AddScoped(provider => new RegulatoryScheduleDtoAccessLayer(connection));//на каждый запрос свой объект
 
 
             // EF DEBUG for SeedData only  !!!!!!!!!!!!!!!
             services.AddDbContext<CisDbContext>(options => options.UseSqlServer(connection));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)

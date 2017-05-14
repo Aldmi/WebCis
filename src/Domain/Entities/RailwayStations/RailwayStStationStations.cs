@@ -1,4 +1,5 @@
-﻿namespace Domain.Entities
+﻿
+namespace Domain.Entities.RailwayStations
 {
     public class RailwayStStationStations
     {

@@ -13,8 +13,8 @@
 </p>
 
 
-<form asp-controller="Stations" asp-action="Index">
-    Title: <input type="text" name="stationsNameFilter">
+<form asp-controller="Stations" asp-action="Index" Method="get">
+    Название станции: <input type="text" name="stationsNameFilter">
     <input type="submit" value="Filter">
 </form>
 

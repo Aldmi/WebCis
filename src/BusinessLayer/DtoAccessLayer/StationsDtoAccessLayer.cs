@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain.Abstract;
 using Domain.Concrete;
 using Domain.DbContext;
 using Domain.Entities;
+using Domain.Entities.RailwayStations;
 using Microsoft.EntityFrameworkCore;
 
-
-namespace BusinessLayer
+namespace BusinessLayer.DtoAccessLayer
 {
-    public class DomainAcessLayer : IDomainAcessLayer
+    public class StationsDtoAccessLayer : IStationDtoAccessLayer
     {
+        #region fields
+
         private readonly DbContextOptionsBuilder<CisDbContext> _optionsBuilder;
+
+        #endregion
 
 
 
@@ -21,7 +23,7 @@ namespace BusinessLayer
 
         #region ctor
 
-        public DomainAcessLayer(string connectionDomain)
+        public StationsDtoAccessLayer(string connectionDomain)
         {
             _optionsBuilder = new DbContextOptionsBuilder<CisDbContext>();
             _optionsBuilder.UseSqlServer(connectionDomain);
@@ -77,23 +79,23 @@ namespace BusinessLayer
 
 
 
-        public async Task AddNewStation(StationDto stationDtoDto, string nameRailwayStation)
+        public async Task AddNewStation(StationDto stationDto, string nameRailwayStation)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
-                if(string.IsNullOrEmpty(nameRailwayStation))
+                if (string.IsNullOrEmpty(nameRailwayStation))
                     return;
 
-                if(stationDtoDto == null)
+                if (stationDto == null)
                     return;
 
-                var railwayStation = await uow.RailwayStationRepository.Get().Include(rs=>rs.Stations).FirstOrDefaultAsync(n => n.Name.Equals("Ленинградский"));
+                var railwayStation = await uow.RailwayStationRepository.Get().Include(rs => rs.Stations).FirstOrDefaultAsync(n => n.Name.Equals("Ленинградский"));
                 if (railwayStation != null)
                 {
                     railwayStation.Stations.Add(new RailwayStStationStations
                     {
                         RailStId = railwayStation.Id,
-                        StationDto = stationDtoDto
+                        StationDto = stationDto
                     });
                     await uow.SaveAsync();
                 }
@@ -101,11 +103,11 @@ namespace BusinessLayer
         }
 
 
-        public async Task AddNewStation(StationDto stationDtoDto, int idRailwayStation)
+        public async Task AddNewStation(StationDto stationDto, int idRailwayStation)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
-                if (stationDtoDto == null)
+                if (stationDto == null)
                     return;
 
                 var railwayStation = await uow.RailwayStationRepository.GetByIdAsync(idRailwayStation);
@@ -114,7 +116,7 @@ namespace BusinessLayer
                     railwayStation.Stations.Add(new RailwayStStationStations
                     {
                         RailStId = railwayStation.Id,
-                        StationDto = stationDtoDto
+                        StationDto = stationDto
                     });
                     await uow.SaveAsync();
                 }
@@ -122,16 +124,16 @@ namespace BusinessLayer
         }
 
 
-        public async Task<bool> EditStation(StationDto stationDtoDto)
+        public async Task<bool> EditStation(StationDto stationDto)
         {
             using (var uow = new UnitOfWork(new CisDbContext(_optionsBuilder.Options)))
             {
                 try
                 {
-                    var findStation = uow.StationRepository.GetById(stationDtoDto.Id);
+                    var findStation = uow.StationRepository.GetById(stationDto.Id);
                     if (findStation != null)
                     {
-                        findStation = stationDtoDto;
+                        findStation = stationDto;
                         uow.StationRepository.Update(findStation);
                         await uow.SaveAsync();
                         return true;
@@ -140,7 +142,7 @@ namespace BusinessLayer
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    var findStation = uow.StationRepository.GetById(stationDtoDto.Id);             
+                    var findStation = uow.StationRepository.GetById(stationDto.Id);
                     if (findStation != null)        //уже удалили из паралельного потока
                     {
                         return false;

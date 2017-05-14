@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using Domain.Entities.RailwayStations;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -19,6 +21,8 @@ namespace Domain.DbContext
         #region Reps
 
         public DbSet<StationDto> Stations { get; set; }
+
+        public DbSet<StationsRouteDto> StationsRoute { get; set; }
 
         public DbSet<RegulatoryScheduleDto> RegulatorySchedules { get; set; }
 
@@ -103,6 +107,29 @@ namespace Domain.DbContext
                 .HasOne(r => r.StationDto)
                 .WithMany(r => r.RailwayStations)
                 .HasForeignKey(r => r.StatId);
+
+
+
+            // O2M StationDto.StationsRouteDto <---> StationsRouteDto.StationDto
+            modelBuilder.Entity<StationDto>()
+                .HasMany(st => st.StationsRouteDto)
+                .WithOne(st => st.StationDto)
+                .HasForeignKey(st => st.StationDtoId)
+                .IsRequired();
+
+            // M2M RegulatoryScheduleDto.Route <---> StationsRouteDto.RegShRoutes
+            modelBuilder.Entity<RegShStationsRouteRoutes>()
+                .HasKey(t => new { t.RegShId, StationId = t.StatRouteId });      //SQl сервер поддерживает каскадное удаление
+
+            modelBuilder.Entity<RegShStationsRouteRoutes>()
+                .HasOne(r => r.RegulatoryScheduleDto)
+                .WithMany(r => r.Route)
+                .HasForeignKey(r => r.RegShId);
+
+            modelBuilder.Entity<RegShStationsRouteRoutes>()
+                .HasOne(r => r.StationRouteDto)
+                .WithMany(r => r.RegShRoutes)
+                .HasForeignKey(r => r.StatRouteId);
         }
     }
 }
